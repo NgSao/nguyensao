@@ -37,15 +37,13 @@ export default function Home() {
         {/* Hero Section */}
         <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-16">
           <div className="flex-1">
-            {/* <h1 className="text-4xl font-bold mb-4">
-              Xin chào, Tôi là <span className="text-yellow-400">Sao Nguyen</span> 👋
-            </h1> */}
-            <h1 className="text-4xl font-bold mb-4 flex items-center gap-2">
+
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 flex flex-wrap items-center gap-2">
               Xin chào, Tôi là
               <span className="relative flex items-center gap-2 text-yellow-400 font-extrabold animate-glow">
                 Sao Nguyen
                 <svg
-                  className="w-6 h-6 text-yellow-300 animate-spin"
+                  className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-300 animate-spin"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
