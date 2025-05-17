@@ -173,7 +173,7 @@ export default function Home() {
                 </div>
                 {/* <p className="text-zinc-300 font-medium mb-2">Cử nhân</p> */}
                 <p className="text-zinc-400">
-                  Chuyên ngành công nghề phần mền.
+                  Chuyên ngành Công nghệ Phần mềm
                 </p>
               </div>
             </div>
