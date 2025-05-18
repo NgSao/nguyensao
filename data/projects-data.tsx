@@ -149,7 +149,7 @@ export const webProjects: Project[] = [
     },
     {
         id: 22,
-        title: "Xây dựng ứng dụng của bằng điện thoại MT Mobile",
+        title: "Xây dựng ứng dụng cửa hàng điện thoại MT Mobile",
         description: `Ứng dụng MT Mobile cho phép người dùng duyệt sản phẩm, đặt hàng và theo dõi đơn hàng. Sử dụng Spring Boot cho backend và React Native cho frontend di động.  
 Phát triển hệ thống thương mại điện tử B2C đa lớp với backend sử dụng Spring Boot và ứng dụng di động bằng React Native. Các tính năng chính bao gồm:  
 - Đăng nhập OAuth2 (Email/Google), xác thực OTP, đặt lại mật khẩu  
