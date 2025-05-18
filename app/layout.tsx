@@ -6,6 +6,8 @@ import Link from "next/link"
 import { ThemeProvider } from "@/components/theme-provider"
 import MobileMenu from "@/components/mobile-menu"
 import Footer from "@/components/footer"
+import ChatBox from "@/components/chat-box"
+import MusicPlayer from "@/components/music-player"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -55,7 +57,11 @@ export default function RootLayout({
               </div>
             </header>
             <main className="flex-grow bg-black">{children}</main>
-            <Footer />
+            <div className="relative">
+              <ChatBox />
+              <MusicPlayer />
+              <Footer />
+            </div>
           </div>
         </ThemeProvider>
       </body>

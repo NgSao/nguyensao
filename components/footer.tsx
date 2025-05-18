@@ -12,7 +12,7 @@ export default function Footer() {
                 <p className="text-zinc-400 max-w-2xl mx-auto mb-8">
                     Nếu bạn có bất kỳ câu hỏi nào hoặc muốn trao đổi về cơ hội hợp tác, vui lòng liên hệ với tôi qua các kênh sau:
                 </p>
-                <div className="bg-black/80 backdrop-blur-sm  sticky top-0 z-50 pb-10 ">
+                <div className="bg-black/80 backdrop-blur-sm  sticky top-0 z-40 pb-10 ">
                     <div className="flex justify-center space-x-4">
                         <a
                             href="https://github.com/NgSao"
