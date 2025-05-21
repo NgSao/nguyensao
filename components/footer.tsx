@@ -57,7 +57,7 @@ export default function Footer() {
                 <p className="text-zinc-400 max-w-2xl mx-auto mb-8">
                     Tôi rất mong được nghe phản hồi từ bạn và sẵn sàng trao đổi thêm về các dự án cũng như cơ hội hợp tác.
                 </p>
-                <p className="text-zinc-600 text-sm mb-10">Cập nhật lần cuối: 16/05/2025</p>
+                <p className="text-zinc-600 text-sm mb-10">Cập nhật lần cuối: 21/05/2025</p>
             </div>
 
         </footer>

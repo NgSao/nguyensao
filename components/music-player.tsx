@@ -2,7 +2,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Volume2, VolumeX, Music } from "lucide-react"
+import { Volume2, VolumeX, Music, Repeat, Shuffle, SkipBack, SkipForward } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 
@@ -21,6 +21,47 @@ export default function MusicPlayer() {
     const playerRef = useRef<YT.Player | null>(null)
     const containerRef = useRef<HTMLDivElement>(null)
 
+    const playlist = [
+        { id: "j6qE-TCigkE", title: "Thu Cuối, Hẹn Một Mai..." },
+        { id: "t0glDqwyEHA", title: "Sau Lời Từ Khước, Có Chàng Trai Viết..." },
+        { id: "kUY1vDi28Ms", title: "Lâm Chấn Khang" }
+    ]
+
+    const [currentIndex, setCurrentIndex] = useState(0)
+    const [isShuffling, setIsShuffling] = useState(false)
+    const [isRepeating, setIsRepeating] = useState(false)
+
+    const loadAndPlayVideo = (index: number) => {
+        const videoId = playlist[index].id
+        if (playerRef.current && videoId) {
+            playerRef.current.loadVideoById(videoId)
+            setIsPlaying(true)
+        }
+    }
+
+    const playNext = () => {
+        if (isShuffling) {
+            let randomIndex
+            do {
+                randomIndex = Math.floor(Math.random() * playlist.length)
+            } while (randomIndex === currentIndex)
+            setCurrentIndex(randomIndex)
+        } else {
+            setCurrentIndex((prev) => (prev + 1) % playlist.length)
+        }
+    }
+
+    const playPrevious = () => {
+        setCurrentIndex((prev) => (prev - 1 + playlist.length) % playlist.length)
+    }
+
+    useEffect(() => {
+        if (playerRef.current && playlist[currentIndex]) {
+            loadAndPlayVideo(currentIndex)
+        }
+    }, [currentIndex])
+
+
     // Load YouTube API
     useEffect(() => {
         // Create YouTube script tag
@@ -34,7 +75,7 @@ export default function MusicPlayer() {
             playerRef.current = new window.YT.Player("youtube-player", {
                 height: "0",
                 width: "0",
-                videoId: "j6qE-TCigkE", // Thu Cuối, Hẹn Một Mai... video ID
+                videoId: playlist[0].id,
                 playerVars: {
                     autoplay: 1, // Enable autoplay
                     controls: 0,
@@ -54,14 +95,17 @@ export default function MusicPlayer() {
                         event.target.playVideo()
                     },
                     onStateChange: (event) => {
-                        if (event.data === window.YT.PlayerState.PLAYING) {
+                        if (event.data === window.YT.PlayerState.ENDED) {
+                            if (isRepeating) {
+                                playerRef.current?.seekTo(0)
+                                playerRef.current?.playVideo()
+                            } else {
+                                playNext()
+                            }
+                        } else if (event.data === window.YT.PlayerState.PLAYING) {
                             setIsPlaying(true)
                         } else if (event.data === window.YT.PlayerState.PAUSED) {
                             setIsPlaying(false)
-                        } else if (event.data === window.YT.PlayerState.ENDED) {
-                            // Replay when ended
-                            event.target.seekTo(0, true)
-                            event.target.playVideo()
                         }
                     },
                     onError: (event) => {
@@ -151,8 +195,9 @@ export default function MusicPlayer() {
                 ref={containerRef}
                 className={`fixed z-50 transition-all duration-300 ease-in-out ${isMinimized
                     ? "bottom-6 left-6 w-12 h-12 rounded-full"
-                    : "bottom-6 left-6 w-64 h-16 rounded-full sm:rounded-lg"
-                    } `}
+                    : "bottom-6 left-6  h-auto sm:h-16 rounded-lg"
+                    }`}
+
             >
                 {isMinimized ? (
                     <>
@@ -184,8 +229,11 @@ export default function MusicPlayer() {
                         )}
                     </>
                 ) : (
-                    <div className="flex items-center justify-between p-3 h-full">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 h-full gap-2">
                         <div className="flex items-center gap-3">
+                            <Button onClick={playPrevious} variant="ghost" size="icon" className="text-white hover:text-yellow-500">
+                                <SkipBack size={16} />
+                            </Button>
                             <Button
                                 variant="ghost"
                                 size="icon"
@@ -205,16 +253,25 @@ export default function MusicPlayer() {
                                     </svg>
                                 )}
                             </Button>
-
-                            <div className="flex flex-col">
+                            <Button onClick={playNext} variant="ghost" size="icon" className="text-white hover:text-yellow-500">
+                                <SkipForward size={16} />
+                            </Button>
+                            <div className="flex flex-col max-md:hidden">
                                 <span className="text-xs font-medium text-white truncate max-w-[120px]">
-                                    Thu Cuối, Hẹn Một Mai...
+                                    {playlist[currentIndex].title}
+
                                 </span>
-                                <span className="text-xs text-zinc-400">TPT Music</span>
+                                <span className="text-xs text-zinc-400">SN Music</span>
                             </div>
                         </div>
 
                         <div className="flex items-center gap-2">
+                            <Button onClick={() => setIsShuffling(!isShuffling)} variant="ghost" size="icon" className={isShuffling ? "text-yellow-400" : "text-zinc-400"}>
+                                <Shuffle size={16} />
+                            </Button>
+                            <Button onClick={() => setIsRepeating(!isRepeating)} variant="ghost" size="icon" className={isRepeating ? "text-yellow-400" : "text-zinc-400"}>
+                                <Repeat size={16} />
+                            </Button>
                             <Button
                                 variant="ghost"
                                 size="icon"
@@ -264,3 +321,4 @@ export default function MusicPlayer() {
         </>
     )
 }
+

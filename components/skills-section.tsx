@@ -1,38 +1,37 @@
 "use client"
 
 export default function SkillsSection() {
-  // All skills in a flat array
   const skills = [
     // Backend
-    { name: "JAVA", color: "#F89820", icon: "☕" },
-    { name: "SPRING", color: "#6DB33F", icon: "🍃" },
-    { name: "HIBERNATE", color: "#59666C", icon: "🔄" },
-    { name: "MICROSERVICES", color: "#1E88E5", icon: "🔌" },
+    { name: "JAVA", url: "https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white" },
+    { name: "SPRING", url: "https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white" },
+    { name: "HIBERNATE", url: "https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white" },
+    { name: "MICROSERVICES", url: "https://img.shields.io/badge/Microservices-2A2A2A?style=for-the-badge&logo=docker&logoColor=white" },
 
     // Databases
-    { name: "MYSQL", color: "#00758F", icon: "🐬" },
-    { name: "SQL SERVER", color: "#CC2927", icon: "🗄️" },
-    { name: "MONGODB", color: "#4DB33D", icon: "🍃" },
+    { name: "MYSQL", url: "https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white" },
+    { name: "SQL SERVER", url: "https://img.shields.io/badge/sql%20server-%23CC2927.svg?style=for-the-badge&logo=microsoft%20sql%20server&logoColor=white" },
+    { name: "MONGODB", url: "https://img.shields.io/badge/mongodb-%2347A248.svg?style=for-the-badge&logo=mongodb&logoColor=white" },
 
     // Cache
-    { name: "REDIS", color: "#DC382D", icon: "🔄" },
+    { name: "REDIS", url: "https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white" },
 
     // Message Brokers
-    { name: "RABBITMQ", color: "#FF6600", icon: "🐇" },
-    { name: "APACHE KAFKA", color: "#000000", icon: "🔄" },
+    { name: "RABBITMQ", url: "https://img.shields.io/badge/RabbitMQ-FF6600?style=for-the-badge&logo=rabbitmq&logoColor=white" },
+    { name: "APACHE KAFKA", url: "https://img.shields.io/badge/Apache%20Kafka-000?style=for-the-badge&logo=apachekafka" },
 
     // DevOps & CI/CD
-    { name: "DOCKER", color: "#2496ED", icon: "🐳" },
+    { name: "DOCKER", url: "https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white" },
 
     // Frontend
-    { name: "REACT NATIVE", color: "#61DAFB", icon: "⚛️" },
-    { name: "REACT", color: "#61DAFB", icon: "⚛️" },
+    { name: "REACT NATIVE", url: "https://img.shields.io/badge/react%20native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB" },
+    { name: "REACT", url: "https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB" },
 
     // Tools & Utilities
-    { name: "GIT", color: "#F05032", icon: "🔄" },
-    { name: "POSTMAN", color: "#FF6C37", icon: "📮" },
-    { name: "SWAGGER", color: "#85EA2D", icon: "📝" },
-  ]
+    { name: "GIT", url: "https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white" },
+    { name: "POSTMAN", url: "https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white" },
+    { name: "SWAGGER", url: "https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white" },
+  ];
 
   return (
     <section className="mb-16">
@@ -40,16 +39,14 @@ export default function SkillsSection() {
 
       <div className="flex flex-wrap gap-3">
         {skills.map((skill, index) => (
-          <div
+          <img
             key={index}
-            className="inline-flex items-center px-3 py-1.5 rounded text-white text-sm font-medium transition-transform hover:scale-105"
-            style={{ backgroundColor: skill.color }}
-          >
-            <span className="mr-2">{skill.icon}</span>
-            {skill.name}
-          </div>
+            src={skill.url}
+            alt={skill.name}
+            className="transition-transform hover:scale-105  cursor-pointer"
+          />
         ))}
       </div>
     </section>
-  )
+  );
 }

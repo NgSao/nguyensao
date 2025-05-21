@@ -12,9 +12,11 @@ interface GitHubProjectCardProps {
 export default function GitHubProjectCard({ project, isFeatured = false }: GitHubProjectCardProps) {
     return (
         <div
-            className={`bg-zinc-900/60 rounded-lg overflow-hidden border border-zinc-800 hover:border-zinc-700 transition-all ${isFeatured ? "p-6" : "p-5"
-                }`}
+            className={`rainbow-border bg-zinc-900/60 rounded-lg overflow-hidden transition-all
+    ${isFeatured ? "p-6" : "p-5 border border-zinc-800 hover:border-zinc-700"}
+  `}
         >
+
             <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center">
                     <Github className="w-5 h-5 mr-2 text-zinc-400" />

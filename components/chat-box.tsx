@@ -1,9 +1,10 @@
+
 "use client"
 
 import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import { createPortal } from "react-dom"
-import { Send, X, MessageSquare } from "lucide-react"
+import { Send, X, Bot } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -20,7 +21,27 @@ export default function ChatBox() {
     const [messages, setMessages] = useState<Message[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const [canSubmit, setCanSubmit] = useState(true)
+    const [hasBeenOpened, setHasBeenOpened] = useState(false)
+    const [currentMessageIndex, setCurrentMessageIndex] = useState(0)
+    const [messageCycleCount, setMessageCycleCount] = useState(0) // Đếm số lần chuyển đổi thông báo
+    const [showMessages, setShowMessages] = useState(true) // Điều khiển hiển thị thông báo
     const messagesEndRef = useRef<HTMLDivElement>(null)
+
+    // Danh sách các thông báo
+    const messagesList = [
+        hasBeenOpened ? "Xin chào bạn, rất vui được gặp lại! 👋" : "Xin chào bạn, rất vui được gặp bạn! 👋",
+        "Bạn cần câu hỏi gì cứ liên hệ cho mình! 😊",
+        "Mình có thể giúp bạn tìm hiểu về công nghệ! 💻",
+        "Hãy hỏi về các dự án của mình nhé! 🚀",
+        "Bạn có muốn biết thêm về kỹ năng của mình không? 🌟",
+        "Bạn đang quan tâm đến lĩnh vực nào vậy? 🤔",
+        "Đừng ngại ngùng, mình ở đây để giúp bạn! 🤗",
+        "Bạn có muốn xem CV của mình không? 📝",
+        "Mình còn có nhiều điều thú vị để chia sẻ đấy! 🎯",
+        "Bạn có câu hỏi về kinh nghiệm làm việc của mình không? 💼",
+        "Cứ thoải mái đặt câu hỏi cho mình nhé! 📩",
+        "Mình sẽ hỗ trợ bạn bất cứ lúc nào bạn cần nhé. 😊 Tạm biệt bạn!",
+    ];
 
     // Scroll to bottom of messages
     useEffect(() => {
@@ -40,27 +61,52 @@ Bạn cần biết gì từ tôi? Dưới đây là một vài gợi ý bạn c�
 - 💼 [Kỹ năng của bạn là gì?]  
 - 🚀 [Bạn đã làm những dự án nào?]
 
-Hãy chọn một câu hỏi hoặc nhập bất cứ điều gì bạn muốn hỏi nhé!`
-
+Hãy chọn một câu hỏi hoặc nhập bất cứ điều gì bạn muốn hỏi nhé!`,
                 },
             ])
         }
     }, [isOpen, messages.length])
 
-    const handleSubmit = async (e: React.FormEvent, question?: string) => {
-        e.preventDefault();
-        const userMessage = question || input.trim();
-        if (!userMessage) return;
+    // Cập nhật trạng thái hasBeenOpened khi chat được mở
+    useEffect(() => {
+        if (isOpen) {
+            setHasBeenOpened(true)
+        }
+    }, [isOpen])
 
-        setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
-        setInput("");
-        setIsLoading(true);
-        setCanSubmit(false);
-        setTimeout(() => setCanSubmit(true), 2000);
+    // Tạo vòng lặp để chuyển đổi giữa các thông báo
+    useEffect(() => {
+        if (!isOpen && showMessages) {
+            const interval = setInterval(() => {
+                setCurrentMessageIndex((prev) => {
+                    const nextIndex = (prev + 1) % messagesList.length
+                    setMessageCycleCount((count) => count + 1)
+                    return nextIndex
+                })
+            }, 10000)
+
+            return () => {
+                clearInterval(interval)
+            }
+        } else {
+            setCurrentMessageIndex(0)
+        }
+    }, [isOpen, showMessages, messagesList.length])
+
+    const handleSubmit = async (e: React.FormEvent, question?: string) => {
+        e.preventDefault()
+        const userMessage = question || input.trim()
+        if (!userMessage) return
+
+        setMessages((prev) => [...prev, { role: "user", content: userMessage }])
+        setInput("")
+        setIsLoading(true)
+        setCanSubmit(false)
+        setTimeout(() => setCanSubmit(true), 2000)
 
         try {
-            const normalizedMessage = userMessage.toLowerCase().replace(/\s+/g, " ").trim();
-            let response = "";
+            const normalizedMessage = userMessage.toLowerCase().replace(/\s+/g, " ").trim()
+            let response = ""
 
             if (normalizedMessage.includes("bạn là ai") || normalizedMessage.includes("giới thiệu bản thân")) {
                 response = `
@@ -68,7 +114,7 @@ Tôi là Nguyễn Sao, sinh ngày 29/06/2004, hiện là sinh viên công nghệ
 Tôi đam mê phát triển phần mềm, định hướng trở thành Java Backend Developer. 
 Kỹ năng: Java, Spring Boot, RESTful APIs, MySQL, SQL Server, Kafka, Redis, React Native. 
 Mục tiêu: Trở thành thực tập sinh Java và làm việc toàn thời gian, tiếp tục học đại học.
-            `.trim();
+                `.trim()
             } else if (normalizedMessage.includes("liên hệ") || normalizedMessage.includes("contact")) {
                 response = `
 Thông tin liên hệ của tôi:  
@@ -76,7 +122,7 @@ Thông tin liên hệ của tôi:
 - Email: nguyensaovn2019@gmail.com  
 - Địa chỉ: Linh Trung, Thủ Đức  
 - Website: https://nguyensao.id.vn
-            `.trim();
+                `.trim()
             } else if (normalizedMessage.includes("kỹ năng") || normalizedMessage.includes("skills")) {
                 response = `
 Kỹ năng của tôi:  
@@ -87,7 +133,7 @@ Kỹ năng của tôi:
 - DevOps: Docker  
 - Công cụ: Github, Postman  
 - Kỹ năng mềm: Tự học, làm việc nhóm, ham học hỏi
-            `.trim();
+                `.trim()
             } else if (normalizedMessage.includes("dự án") || normalizedMessage.includes("project")) {
                 response = `
 Dự án của tôi:  
@@ -100,29 +146,27 @@ Dự án của tôi:
    - Vai trò: FullStack  
    - Công nghệ: Java 17, Spring Boot, React Native, Kafka, Redis, OAuth2, MySQL, Docker  
    - Github: https://github.com/NgSao/ecommerce-layered-architecture, https://github.com/NgSao/ecommer-app-reactnativ
-            `.trim();
+                `.trim()
             } else {
-                // Fallback to Gemini API (same as before, unchanged)
-                const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || "YOUR_API_KEY";
-                const context = `...`; // (unchanged context)
+                const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || "YOUR_API_KEY"
+                const context = ""
                 const res = await axios.post(
                     `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
                     { contents: [{ parts: [{ text: `${context}\nCâu hỏi: ${userMessage}` }] }] },
                     { headers: { "Content-Type": "application/json" } }
-                );
-                response = res.data.candidates?.[0]?.content?.parts?.[0]?.text || "Không có phản hồi.";
+                )
+                response = res.data.candidates?.[0]?.content?.parts?.[0]?.text || "Không có phản hồi."
             }
 
-            setMessages((prev) => [...prev, { role: "bot", content: response }]);
+            setMessages((prev) => [...prev, { role: "bot", content: response }])
         } catch (error) {
-            console.error("Lỗi:", error);
-            setMessages((prev) => [...prev, { role: "bot", content: "Đã xảy ra lỗi. Vui lòng thử lại sau." }]);
+            console.error("Lỗi:", error)
+            setMessages((prev) => [...prev, { role: "bot", content: "Đã xảy ra lỗi. Vui lòng thử lại sau." }])
         } finally {
-            setIsLoading(false);
+            setIsLoading(false)
         }
-    };
+    }
 
-    // Handle suggested question click
     const handleSuggestedQuestion = (question: string) => {
         const mockEvent = { preventDefault: () => { } } as React.FormEvent
         setInput(question)
@@ -131,21 +175,33 @@ Dự án của tôi:
 
     return (
         <>
-            {/* Chat button */}
-            <button
-                onClick={() => setIsOpen(true)}
-                className="fixed bottom-4 right-4 w-14 h-14 rounded-full bg-gradient-to-r from-yellow-500 to-yellow-400 text-white flex items-center justify-center shadow-lg hover:shadow-yellow-500/30 hover:scale-105 transition-all duration-300 z-50 animate-pulse-slow md:bottom-6 md:right-6"
-                aria-label="Mở hộp chat"
-            >
-                <div className="absolute w-full h-full rounded-full bg-yellow-500 animate-ping opacity-20"></div>
-                <MessageSquare className="w-6 h-6 relative z-10" />
-            </button>
+            {/* Chat button with welcome messages */}
+            <div className="fixed bottom-4 right-4 z-50 md:bottom-6 md:right-6">
+                {/* Hiển thị thông báo hiện tại dựa trên currentMessageIndex */}
+                {!isOpen && showMessages && (
+                    <div className="absolute bottom-14 right-0 mb-2 w-48 sm:w-56 bg-zinc-900 text-white text-xs sm:text-sm rounded-lg p-2 sm:p-3 shadow-lg border border-zinc-800 animate-fade-in">
+                        <p>{messagesList[currentMessageIndex]}</p>
+                        <div className="absolute -bottom-2 right-4 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-zinc-900"></div>
+                    </div>
+                )}
+
+                {/* Nút chat */}
+                <button
+                    onClick={() => setIsOpen(true)}
+                    className="relative w-14 h-14 rounded-full bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 text-white flex items-center justify-center shadow-lg hover:shadow-[0_0_15px_5px_rgba(255,165,0,0.5)] hover:scale-110 transition-all duration-300 animate-pulse-slow"
+                    aria-label="Mở hộp chat"
+                >
+                    <div className="absolute w-full h-full rounded-full bg-orange-400 animate-ping opacity-20"></div>
+                    <Bot className="w-7 h-7 relative z-10 hover:animate-spin-slow" />
+                </button>
+            </div>
 
             {/* Chat box - rendered using portal */}
             {isOpen &&
                 typeof document !== "undefined" &&
                 createPortal(
-                    <div className="fixed bottom-4 right-2 w-[calc(100%-1rem)] max-w-[360px] h-[70vh] max-h-[500px] bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl flex flex-col z-50 sm:bottom-6 sm:right-4 sm:w-80 sm:max-w-[400px] sm:h-[80vh] sm:max-h-[600px]">                        {/* Chat header */}
+                    <div className="fixed bottom-4 right-2 w-[calc(100%-1rem)] max-w-[360px] h-[70vh] max-h-[500px] bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl flex flex-col z-50 sm:bottom-6 sm:right-4 sm:w-80 sm:max-w-[400px] sm:h-[80vh] sm:max-h-[600px]">
+                        {/* Chat header */}
                         <div className="flex items-center justify-between p-3 sm:p-4 border-b border-zinc-800 bg-zinc-900 rounded-t-xl">
                             <div className="flex items-center gap-2 sm:gap-3">
                                 <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
@@ -249,4 +305,3 @@ Dự án của tôi:
         </>
     )
 }
-

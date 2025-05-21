@@ -336,3 +336,78 @@ body {
   transform: rotate(45deg);
   pointer-events: none;
 }
+
+/* Hiệu ứng */
+@keyframes rainbow-rotate {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 360% 50%;
+  }
+}
+
+.rainbow-border {
+  position: relative;
+  border-image-slice: 1;
+  background: transparent;
+  border-radius: 13;
+
+}
+
+.rainbow-border::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 12px;
+  /* giữ giống cha */
+  padding: 2px;
+  background: linear-gradient(90deg,
+      red,
+      orange,
+      yellow,
+      green,
+      blue,
+      indigo,
+      violet,
+      red);
+  background-size: 400% 100%;
+  animation: rainbow-rotate 15s linear infinite;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.rainbow-border>* {
+  position: relative;
+  z-index: 1;
+}
+
+
+.animate-spin-slow {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}

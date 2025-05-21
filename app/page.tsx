@@ -30,6 +30,7 @@ export default function Home() {
               <span className="mr-2">✨</span> Xem thêm về tôi với CV →
             </Button>
           </a>
+
         </div>
 
 
