@@ -8,8 +8,12 @@ import AnimatedStarsBackground from "@/components/animated-stars-background"
 import ProjectsSection from "@/components/project-section"
 import FeaturedGitHubProjectsSection from "@/components/github-feauted-section"
 import { featuredProjects } from "@/data/projects-data"
+import EducationSection from "@/components/education-section"
 
 export default function Home() {
+
+
+
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Animated Stars Background */}
@@ -152,34 +156,7 @@ export default function Home() {
           </div>
         </section> */}
 
-        {/* Education Section */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold mb-6">Giáo Dục</h2>
-
-          <div className="space-y-8">
-            <div className="flex gap-4">
-              <div className="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center flex-shrink-0 overflow-hidden border-2 border-white">
-                <Image
-                  src="https://hitu.edu.vn/wp-content/uploads/2021/12/favicon.ico"
-                  alt="HITC Logo"
-                  width={48}
-                  height={48}
-                  className="object-cover"
-                />
-              </div>
-              <div className="flex-1">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2">
-                  <h3 className="font-bold text-lg">Cao Đẳng Công Thương TP. Hồ Chí Minh (HITC)</h3>
-                  <span className="text-zinc-400 text-sm">2022 - 2025</span>
-                </div>
-                {/* <p className="text-zinc-300 font-medium mb-2">Cử nhân</p> */}
-                <p className="text-zinc-400">
-                  Chuyên ngành Công nghệ Phần mềm
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
+        <EducationSection />
 
 
         <FeaturedGitHubProjectsSection projects={featuredProjects} />

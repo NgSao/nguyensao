@@ -24,7 +24,11 @@ export default function MusicPlayer() {
     const playlist = [
         { id: "j6qE-TCigkE", title: "Thu Cuối, Hẹn Một Mai..." },
         { id: "t0glDqwyEHA", title: "Sau Lời Từ Khước, Có Chàng Trai Viết..." },
-        { id: "kUY1vDi28Ms", title: "Lâm Chấn Khang" }
+        { id: "kUY1vDi28Ms", title: "Lâm Chấn Khang" },
+        { id: "tLREIDxh9Aw", title: "Nhạc Chill Nhẹ Nhàng" },
+        { id: "xnIJeHPJ07E", title: "Nhạc Lofi Chil - Nhật Phong" }
+
+
     ]
 
     const [currentIndex, setCurrentIndex] = useState(0)
